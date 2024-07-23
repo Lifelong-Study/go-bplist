@@ -1,5 +1,6 @@
 # go-bplist
 
+A parser using Go to implement bplist file
 
 ## First
 
