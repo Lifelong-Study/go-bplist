@@ -10,7 +10,7 @@ I would like to thank these two articles for helping me complete this difficult 
 
 [https://medium.com/@karaiskc/understanding-apples-binary-property-list-format-281e6da00dbd](https://medium.com/@karaiskc/understanding-apples-binary-property-list-format-281e6da00dbd)
 
-<br />
+
 
 ## Getting Started
 #### Installing
@@ -21,7 +21,6 @@ Use go get to retrieve the SDK to add it to your project's Go module dependencie
 go get github.com/Lifelong-Study/go-bplist
 ```
 
-<br />
 
 
 ## Quick Examples
