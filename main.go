@@ -11,7 +11,15 @@ import (
 var format Format
 
 func main() {
-	nodes, err := Parse("info.plist")
+	data, err := Read("info.plist")
+
+	//
+	if err != nil {
+		fmt.Println(err.Error())
+		return
+	}
+
+	nodes, err := Parse(data)
 
 	//
 	if err != nil {
@@ -20,28 +28,29 @@ func main() {
 	}
 
 	//
-	Save(nodes, "sdf.plist")
+	// Save(nodes, "out.plist")
+	Print(nodes)
 }
 
-func Parse(path string) ([]PlistNode, error) {
+func Read(path string) ([]byte, error) {
 	fp, err := os.Open(path)
 	if err != nil {
 		return nil, err
 	}
 	defer fp.Close()
 
-	bytes, err := io.ReadAll(fp)
-	if err != nil {
-		return nil, err
-	}
+	return io.ReadAll(fp)
+}
+
+func Parse(data []byte) ([]PlistNode, error) {
 
 	//
-	if !isBinaryPlistFile(bytes) {
+	if !isBinaryPlistFile(data) {
 		return nil, errors.New("file format is incorrect")
 	}
 
 	format = Format{}
-	format.Data = bytes
+	format.Data = data
 	format = format.fillFooter()
 
 	//
@@ -91,6 +100,20 @@ func Save(nodes []PlistNode, filename string) {
 	PrintXML(fp, 0, `</plist>`)
 }
 
+func Print(nodes []PlistNode) {
+	PrintXML(nil, 0, `<?xml version="1.0" encoding="UTF-8"?>`)
+	PrintXML(nil, 0, `<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">`)
+	PrintXML(nil, 0, `<plist version="1.0">`)
+	PrintXML(nil, 0, `<dict>`)
+
+	for _, node := range nodes {
+		node.Print(nil, 1)
+	}
+
+	PrintXML(nil, 0, `</dict>`)
+	PrintXML(nil, 0, `</plist>`)
+}
+
 func PrintXML(fp *os.File, level int, format string, a ...any) {
 	spaces := ""
 	for range level {
@@ -101,7 +124,11 @@ func PrintXML(fp *os.File, level int, format string, a ...any) {
 	text = fmt.Sprintf(format, a...)
 	text = fmt.Sprintf("%s%s\n", spaces, text)
 
-	fp.WriteString(text)
+	if fp != nil {
+		fp.WriteString(text)
+	} else {
+		fmt.Print(text)
+	}
 }
 
 func isBinaryPlistFile(bytes []byte) bool {
