@@ -1,4 +1,4 @@
-package go_bplist
+package bplist
 
 type Format struct {
 	Data               Bytes
