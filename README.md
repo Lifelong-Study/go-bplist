@@ -36,12 +36,17 @@ import (
 
 func main() {
     // Read bplist format file
-    nodes, err := bplist.Parse("info.plist")
+    data, err := bplist.Read("info.plist")
+
+    if err != nil {
+        panic(err.Error())
+    }
+
+    nodes, err := bplist.Parse(data)
 
     //
     if err != nil {
-        fmt.Println(err.Error())
-        return
+        panic(err.Error())
     }
 
     // save to XML format file

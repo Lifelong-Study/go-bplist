@@ -16,11 +16,9 @@ const (
 	// 0xd800-0xdc00 encodes the high 10 bits of a pair.
 	// 0xdc00-0xe000 encodes the low 10 bits of a pair.
 	// the value is those 20 bits plus 0x10000.
-	surr1 = 0xd800
-	surr2 = 0xdc00
-	surr3 = 0xe000
-
-	// surrSelf = 0x10000
+	surr1 = 0xD800
+	surr2 = 0xDC00
+	surr3 = 0xE000
 )
 
 func UInt16ArrayToString(data []byte) string {
